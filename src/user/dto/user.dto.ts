@@ -2,7 +2,6 @@ export class UserDto {
   id!: number;
   name!: string;
   email!: string;
-  password!: string;
-  staus!: 'active' | 'inactive';
+  status!: 'active' | 'inactive';
   createdAt!: Date;
 }

@@ -25,23 +25,23 @@ export class Product implements IProduct {
 export const productsDB: Array<Product> = [
   new Product({
     id: 1,
-    name: "Product 1",
-    description: "Product 1 description",
+    name: 'Product 1',
+    description: 'Product 1 description',
     price: 100,
-    isDiscontinued: false
+    isDiscontinued: false,
   }),
   new Product({
     id: 2,
-    name: "Product 2",
-    description: "Product 2 description",
+    name: 'Product 2',
+    description: 'Product 2 description',
     price: 200,
-    isDiscontinued: true
+    isDiscontinued: true,
   }),
   new Product({
     id: 3,
-    name: "Product 3",
-    description: "Product 3 description",
+    name: 'Product 3',
+    description: 'Product 3 description',
     price: 300,
-    isDiscontinued: false
-  })
+    isDiscontinued: false,
+  }),
 ];

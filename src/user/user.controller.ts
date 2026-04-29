@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,7 +18,9 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    const user = this.userService.create(createUserDto);
+    if (!user) throw new NotFoundException('Product creation failed');
+    return user;
   }
 
   @Get()
@@ -19,16 +30,33 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    const user = this.userService.findOne(+id);
+    if (!user) {
+      throw new NotFoundException(`The product with id ${id} was not found`);
+    }
+    return user;
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    const user = this.userService.update(+id, updateUserDto);
+    if (!user) {
+      throw new NotFoundException(`Updating the product with id ${id} failed`);
+    }
+    return user;
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    const deletedUser = this.userService.remove(+id);
+    if (!deletedUser) {
+      throw new NotFoundException(`Couldn't delete product with id ${id}`);
+    }
+    return deletedUser;
+  }
+
+  @Delete()
+  removeAll() {
+    return this.userService.removeAll();
   }
 }
