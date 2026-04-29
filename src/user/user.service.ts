@@ -23,12 +23,16 @@ export class UserService {
     return usersDB;
   }
 
+  findActiveusers(): UserDto[] {
+    return usersDB.filter((user) => user.status === "active");
+  }
+
   findOne(id: number): UserDto | null {
     return usersDB.find((user) => user.id === id) ?? null;
   }
 
   update(id: number, updateUserDto: UpdateUserDto): UserDto | null {
-    const index = usersDB.findIndex((user) => user.id === id);
+    const index = usersDB.findIndex((user) => user.id === id &&  user.status ===  "active");
     if (index === -1) return null;
 
     const updatedUser = Object.assign(usersDB[index], updateUserDto);
