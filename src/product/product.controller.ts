@@ -11,12 +11,16 @@ import {
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ProductDto } from './dto/product.dto';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
+  @ApiCreatedResponse({ description: "The product has been successfully created", type: ProductDto })
+  @ApiBadRequestResponse({ description: "Invalid input data", example: { statusCode: 400, message: "Validation failed", error: "Bad Request" } })
   create(@Body() createProductDto: CreateProductDto) {
     const product = this.productService.create(createProductDto);
     if (!product) throw new NotFoundException('Product creation failed');
@@ -24,11 +28,14 @@ export class ProductController {
   }
 
   @Get()
+  @ApiOkResponse({ description: "List of all products", type: [ProductDto] })
   findAll() {
     return this.productService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ description: "The product with the specified ID", type: ProductDto })
+  @ApiBadRequestResponse({ description: "Invalid product ID", example: { statusCode: 400, message: "Validation failed", error: "Bad Request" } })
   findOne(@Param('id') id: string) {
     const product = this.productService.findOne(+id);
     if (!product) {
@@ -38,6 +45,8 @@ export class ProductController {
   }
 
   @Patch(':id')
+  @ApiOkResponse({ description: "The updated product", type: ProductDto })
+  @ApiBadRequestResponse({ description: "Invalid product ID or update data", example: { statusCode: 400, message: "Validation failed", error: "Bad Request" } })
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     const product = this.productService.update(+id, updateProductDto);
     if (!product) {
@@ -47,6 +56,8 @@ export class ProductController {
   }
 
   @Delete(':id')
+  @ApiOkResponse({ description: "The deleted product", type: ProductDto })
+  @ApiBadRequestResponse({ description: "Invalid product ID", example: { statusCode: 400, message: "Validation failed", error: "Bad Request" } })
   remove(@Param('id') id: string) {
     const deletedProduct = this.productService.remove(+id);
     if (!deletedProduct) {
@@ -56,6 +67,7 @@ export class ProductController {
   }
 
   @Delete()
+  @ApiOkResponse({ description: "All products have been deleted" })
   removeAll() {
     return this.productService.removeAll();
   }
