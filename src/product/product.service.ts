@@ -13,7 +13,7 @@ export class ProductService {
       name: createProductDto.name,
       description: createProductDto.description,
       price: createProductDto.price,
-      isDiscontinued: false,
+      isDiscontinued: createProductDto.isDiscontinued ?? false,
     };
     productsDB.push(newProduct);
     return newProduct;
